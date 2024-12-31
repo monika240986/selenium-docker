@@ -13,9 +13,18 @@ pipeline {
             }
 		}
 		stage('push image') {
+            environment {
+                DOCKER_HUB = credentials('docker')
+            }
             steps {
+                 bat 'docker login -u ${DOCKER_HUB_USR} -p ${DOCKER_HUB_PSW}'
                  bat "docker push devshringi/selenium"
             }
 		}
+	}
+	post {
+	    always {
+	        bat "docker logout"
+	    }
 	}
 }
